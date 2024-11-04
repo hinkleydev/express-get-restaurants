@@ -52,3 +52,31 @@ describe("GET /restaurants/:id", function() {
         expect(parsed.location).toBe(restaurant.location);
     })
 })
+
+describe("POST /restaurants", function() {
+    it("updates the array with a new value", async function() {
+        // Get an original for comparison
+        let response = await fetch(baseUrl);
+        const original = await response.json(); 
+        const newObject = {"name" : "Maccies", "location" : "Northwich", "cuisine" : "Fast food"};
+        original.push(newObject)
+
+        const request = new Request(baseUrl, {
+            method: "POST",
+            headers : {
+                "Content-type" : "application/x-www-form-urlencoded"
+            },
+            // I think I might be missing how to do this easier but I'm not sure
+            body: "name=Maccies&location=Northwich&cuisine=Fast%20food",
+        });
+
+        response = await fetch(request);
+        const parsed = await response.json();
+        for(index in parsed) {
+            // Flick through each object and check it has the fields
+            expect(parsed[index].name).toBe(original[index].name);
+            expect(parsed[index].location).toBe(original[index].location);
+            expect(parsed[index].cuisine).toBe(original[index].cuisine);
+        }
+    })
+})

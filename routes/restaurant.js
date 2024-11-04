@@ -1,6 +1,7 @@
 const express = require("express");
 const restaurantRoute = express.Router();
-const Restaurant = require("../models/index")
+const Restaurant = require("../models/index");
+const bodyParser = require("body-parser");
 
 // Middleware
 restaurantRoute.use(express.json());
@@ -25,12 +26,14 @@ restaurantRoute.get("/restaurants/:id", async function(req, res) {
 })
 
 // Add new restaurant
-restaurantRoute.put("/restaurants", async function(req, res) {
+restaurantRoute.post("/restaurants", async function(req, res) {
     const name = req.body.name;
     const location = req.body.location;
     const cuisine = req.body.cuisine;
+    console.log(req.body);
     const restaurant = await Restaurant.create({name, location, cuisine});
-    res.send(restaurant);
+    const allRestaurants = await Restaurant.findAll();
+    res.send(allRestaurants);
 })
 
 // Change restaurant
@@ -44,7 +47,7 @@ restaurantRoute.post("/restaurants/:id", async function(req, res) {
         return;
     }
     await restaurant.update({name, location, cuisine});
-    res.send(restaurant);
+    res.send(allRestaurants);
 })
 
 // Delete restaurant
