@@ -102,3 +102,17 @@ describe("PUT /restaurants/:id", function() {
         expect(parsed.cuisine).toBe(readObject.cuisine);
     })
 })
+
+describe("DELETE /restaurants/:id", function() {
+    it("deletes the restaurant with the provided ID", async function() {
+        const request = new Request(baseUrl + "/1", {
+            method: "DELETE"
+        });
+
+        const response = await fetch(request);
+    
+        // Now check it isn't there anymore
+        const lookForDeleted = await fetch(baseUrl + "/1");
+        expect(lookForDeleted.status).toBe(404);
+    })
+})

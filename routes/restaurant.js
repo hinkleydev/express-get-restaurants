@@ -18,7 +18,7 @@ restaurantRoute.get("/restaurants", async function(req, res) {
 restaurantRoute.get("/restaurants/:id", async function(req, res) {
     const restaurant = await Restaurant.findByPk(req.params.id);
     if (restaurant == null) {
-        res.send("Restaurant not found");
+        res.status(404).send({error: "Restaurant not found"});
         return;
     }
     const result = JSON.stringify(restaurant);
@@ -42,7 +42,7 @@ restaurantRoute.post("/restaurants/:id", async function(req, res) {
     const cuisine = req.body.cuisine;
     const restaurant = await Restaurant.findByPk(req.params.id);
     if (restaurant == null) {
-        res.send("Restaurant not found");
+        res.status(404).send({error: "Restaurant not found"});
         return;
     }
     await restaurant.update({name, location, cuisine});
@@ -53,7 +53,7 @@ restaurantRoute.post("/restaurants/:id", async function(req, res) {
 restaurantRoute.delete("/restaurants/:id", async function(req, res) {
     let restaurant = await Restaurant.findByPk(req.params.id);
     if (restaurant == null) {
-        res.send("Restaurant not found");
+        res.status(404).send({error: "Restaurant not found"});
         return;
     }
     await restaurant.destroy();
