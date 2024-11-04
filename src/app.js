@@ -33,7 +33,15 @@ app.put("/restaurants", async function(req, res) {
 })
 
 // Change restaurant
-//app.
+app.post("/restaurants/:id", async function(req, res) {
+    const name = req.body.name;
+    const location = req.body.location;
+    const cuisine = req.body.cuisine;
+    const restaraunt = await Restaurant.findByPk(req.params.id);
+    await restaraunt.update({name, location, cuisine});
+    const result = JSON.stringify(restaraunt);
+    res.send(restaraunt);
+})
 
 
 module.exports = app;
