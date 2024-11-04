@@ -27,9 +27,8 @@ app.put("/restaurants", async function(req, res) {
     const name = req.body.name;
     const location = req.body.location;
     const cuisine = req.body.cuisine;
-    const restaurant = Restaurant.create({name, location, cuisine});
-    const result = JSON.stringify(restaurant);
-    res.send("Added!");
+    const restaurant = await Restaurant.create({name, location, cuisine});
+    res.send(restaurant);
 })
 
 // Change restaurant
@@ -39,7 +38,6 @@ app.post("/restaurants/:id", async function(req, res) {
     const cuisine = req.body.cuisine;
     const restaraunt = await Restaurant.findByPk(req.params.id);
     await restaraunt.update({name, location, cuisine});
-    const result = JSON.stringify(restaraunt);
     res.send(restaraunt);
 })
 
