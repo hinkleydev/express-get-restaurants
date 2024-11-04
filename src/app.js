@@ -41,5 +41,12 @@ app.post("/restaurants/:id", async function(req, res) {
     res.send(restaraunt);
 })
 
+// Delete restaurant
+app.delete("/restaurants/:id", async function(req, res) {
+    let restaraunt = await Restaurant.findByPk(req.params.id);
+    await restaraunt.destroy();
+    res.send("Deleted");
+})
+
 
 module.exports = app;
