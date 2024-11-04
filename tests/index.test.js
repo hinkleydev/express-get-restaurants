@@ -39,3 +39,16 @@ describe("GET /restaurants", function() {
         }
     })
 })
+
+// These tests will assume that an object with ID 1 exists
+describe("GET /restaurants/:id", function() {
+    it("returns the correct data", async function() {
+        const restaurant = await Restaurant.findByPk(1);
+        const response = await fetch(baseUrl + "/1");
+        const parsed = await response.json();
+        // A regular object comparison does not pass because the datetime fields are stored differently from the API and Sequelize
+        expect(parsed.name).toBe(restaurant.name);
+        expect(parsed.cuisine).toBe(restaurant.cuisine);
+        expect(parsed.location).toBe(restaurant.location);
+    })
+})
