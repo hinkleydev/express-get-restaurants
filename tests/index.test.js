@@ -35,7 +35,7 @@ describe("GET /restaurants", function() {
         const parsed = await response.json();
         for(index in restaurants) {
             // Object comparison
-            expect(parsed[index]).toBe(parsed[index]);
+            expect(parsed[index]).toEqual(parsed[index]);
         }
     })
 })
