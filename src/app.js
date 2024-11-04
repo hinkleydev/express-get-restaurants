@@ -17,8 +17,12 @@ app.get("/restaurants", async function(req, res) {
 
 // Specific restaurants
 app.get("/restaurants/:id", async function(req, res) {
-    const restaraunt = await Restaurant.findByPk(req.params.id);
-    const result = JSON.stringify(restaraunt);
+    const restaurant = await Restaurant.findByPk(req.params.id);
+    if (restaurant == null) {
+        res.send("Restaurant not found");
+        return;
+    }
+    const result = JSON.stringify(restaurant);
     res.send(result);
 })
 
@@ -36,15 +40,23 @@ app.post("/restaurants/:id", async function(req, res) {
     const name = req.body.name;
     const location = req.body.location;
     const cuisine = req.body.cuisine;
-    const restaraunt = await Restaurant.findByPk(req.params.id);
-    await restaraunt.update({name, location, cuisine});
-    res.send(restaraunt);
+    const restaurant = await Restaurant.findByPk(req.params.id);
+    if (restaurant == null) {
+        res.send("Restaurant not found");
+        return;
+    }
+    await restaurant.update({name, location, cuisine});
+    res.send(restaurant);
 })
 
 // Delete restaurant
 app.delete("/restaurants/:id", async function(req, res) {
-    let restaraunt = await Restaurant.findByPk(req.params.id);
-    await restaraunt.destroy();
+    let restaurant = await Restaurant.findByPk(req.params.id);
+    if (restaurant == null) {
+        res.send("Restaurant not found");
+        return;
+    }
+    await restaurant.destroy();
     res.send("Deleted");
 })
 
