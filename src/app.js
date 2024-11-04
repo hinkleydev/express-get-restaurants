@@ -23,7 +23,7 @@ app.get("/restaurants/:id", async function(req, res) {
 })
 
 // Add new restaurant
-app.post("/restaurants", async function(req, res) {
+app.put("/restaurants", async function(req, res) {
     const name = req.body.name;
     const location = req.body.location;
     const cuisine = req.body.cuisine;
@@ -31,6 +31,9 @@ app.post("/restaurants", async function(req, res) {
     const result = JSON.stringify(restaurant);
     res.send("Added!");
 })
+
+// Change restaurant
+//app.
 
 
 module.exports = app;
