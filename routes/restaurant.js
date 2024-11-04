@@ -30,7 +30,6 @@ restaurantRoute.post("/restaurants", async function(req, res) {
     const name = req.body.name;
     const location = req.body.location;
     const cuisine = req.body.cuisine;
-    console.log(req.body);
     const restaurant = await Restaurant.create({name, location, cuisine});
     const allRestaurants = await Restaurant.findAll();
     res.send(allRestaurants);
@@ -47,7 +46,7 @@ restaurantRoute.post("/restaurants/:id", async function(req, res) {
         return;
     }
     await restaurant.update({name, location, cuisine});
-    res.send(allRestaurants);
+    res.send(restaurant);
 })
 
 // Delete restaurant

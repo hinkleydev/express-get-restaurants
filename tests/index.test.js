@@ -80,3 +80,25 @@ describe("POST /restaurants", function() {
         }
     })
 })
+
+describe("PUT /restaurants/:id", function() {
+    it("updates a restaurants with the provided values", async function() {
+        const newObject = {"name" : "Maccies", "location" : "Northwich", "cuisine" : "Fast food"};
+
+        const request = new Request(baseUrl + "/1", {
+            method: "POST",
+            headers : {
+                "Content-type" : "application/x-www-form-urlencoded"
+            },
+            // I think I might be missing how to do this easier but I'm not sure
+            body: "name=Maccies&location=Northwich&cuisine=Fast%20food",
+        });
+        const result = await fetch(request);
+        const parsed = await result.json();
+
+        const readObject = await Restaurant.findByPk(1);
+        expect(parsed.name).toBe(readObject.name);
+        expect(parsed.location).toBe(readObject.location);
+        expect(parsed.cuisine).toBe(readObject.cuisine);
+    })
+})
