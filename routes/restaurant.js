@@ -10,8 +10,7 @@ restaurantRoute.use(express.urlencoded());
 // All restaurants
 restaurantRoute.get("/restaurants", async function(req, res) {
     const restaurants = await Restaurant.findAll();
-    const result = JSON.stringify(restaurants)
-    res.send(result);
+    res.json(restaurants);
 })
 
 // Specific restaurants
@@ -21,8 +20,7 @@ restaurantRoute.get("/restaurants/:id", async function(req, res) {
         res.status(404).send({error: "Restaurant not found"});
         return;
     }
-    const result = JSON.stringify(restaurant);
-    res.send(result);
+    res.json(restaurant);
 })
 
 // Add new restaurant
@@ -32,7 +30,7 @@ restaurantRoute.post("/restaurants", async function(req, res) {
     const cuisine = req.body.cuisine;
     const restaurant = await Restaurant.create({name, location, cuisine});
     const allRestaurants = await Restaurant.findAll();
-    res.send(allRestaurants);
+    res.json(allRestaurants);
 })
 
 // Change restaurant
@@ -46,7 +44,7 @@ restaurantRoute.post("/restaurants/:id", async function(req, res) {
         return;
     }
     await restaurant.update({name, location, cuisine});
-    res.send(restaurant);
+    res.json(restaurant);
 })
 
 // Delete restaurant
@@ -57,7 +55,7 @@ restaurantRoute.delete("/restaurants/:id", async function(req, res) {
         return;
     }
     await restaurant.destroy();
-    res.send("Deleted");
+    res.json({message: "Deleted"});
 })
 
 module.exports = restaurantRoute;
