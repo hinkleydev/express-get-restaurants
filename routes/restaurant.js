@@ -34,7 +34,7 @@ restaurantRoute.post("/restaurants", async function(req, res) {
 })
 
 // Change restaurant
-restaurantRoute.post("/restaurants/:id", async function(req, res) {
+restaurantRoute.put("/restaurants/:id", async function(req, res) {
     const name = req.body.name;
     const location = req.body.location;
     const cuisine = req.body.cuisine;
