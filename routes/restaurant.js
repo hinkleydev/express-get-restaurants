@@ -2,6 +2,15 @@ const express = require("express");
 const restaurantRoute = express.Router();
 const Restaurant = require("../models/index");
 const bodyParser = require("body-parser");
+const { check, validationResult } = require("express-validator");
+
+/** All of these chains perform the exact same operation on seperate variables
+ *  check it's not empty -> trim it down
+ *  They're seperated for readability
+ */
+const checkName = () => check("name").not().isEmpty().trim();
+const checkLocation = () => check("location").not().isEmpty().trim();
+const checkCuisine = () => check("cuisine").not().isEmpty().trim();
 
 // All restaurants
 restaurantRoute.get("/restaurants", async function(req, res) {
@@ -20,17 +29,31 @@ restaurantRoute.get("/restaurants/:id", async function(req, res) {
 })
 
 // Add new restaurant
-restaurantRoute.post("/restaurants", async function(req, res) {
+restaurantRoute.post("/restaurants", 
+    [checkName(), checkLocation(), checkCuisine()], // Validators 
+    async function(req, res) {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+        res.status(400).json({error})
+        return;
+    }
     const name = req.body.name;
     const location = req.body.location;
     const cuisine = req.body.cuisine;
-    const restaurant = await Restaurant.create({name, location, cuisine});
+    await Restaurant.create({name, location, cuisine});
     const allRestaurants = await Restaurant.findAll();
     res.json(allRestaurants);
 })
 
 // Change restaurant
-restaurantRoute.put("/restaurants/:id", async function(req, res) {
+restaurantRoute.put("/restaurants/:id", 
+    [checkName(), checkLocation(), checkCuisine()], // Validators 
+    async function(req, res) {
+    const error = validationResult(req);
+        if (!error.isEmpty()) {
+            res.status(400).json({error})
+            return;
+        }
     const name = req.body.name;
     const location = req.body.location;
     const cuisine = req.body.cuisine;
