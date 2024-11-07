@@ -63,7 +63,7 @@ describe("POST /restaurants", function() {
         // Get an original for comparison
         let response = await request(app).get(baseUrl);
         const original = JSON.parse(response.text);
-        const newObject = {"name" : "Maccies", "location" : "Northwich", "cuisine" : "Fast food"};
+        const newObject = {name : "Maccies", location : "Northwich", cuisine : "Fast food"};
         original.push(newObject)
 
         const addRestaurant = await request(app).post(baseUrl).send(newObject);
@@ -78,23 +78,23 @@ describe("POST /restaurants", function() {
     it("rejects data with no name", async function() {
         const badData = {location: "Kingsmead", cuisine: "Indian"};
         const badRequest = await request(app).post(baseUrl).send(badData);
-        expect(badRequest.statusCode).toBe(400);
+        expect(badRequest.status).toBe(400);
     })
     it("rejects data with no location", async function() {
         const badData = {name: "Kingsmead spice", cuisine: "Indian"};
         const badRequest = await request(app).post(baseUrl).send(badData);
-        expect(badRequest.statusCode).toBe(400);
+        expect(badRequest.status).toBe(400);
     })
     it("rejects data with no cuisine", async function() {
         const badData = {name: "Kingsmead spice", location: "Kingsmead"};
         const badRequest = await request(app).post(baseUrl).send(badData);
-        expect(badRequest.statusCode).toBe(400);
+        expect(badRequest.status).toBe(400);
     })
 })
 
 describe("PUT /restaurants/:id", function() {
     it("updates a restaurants with the provided values", async function() {
-        const newObject = {"name" : "Maccies", "location" : "Northwich", "cuisine" : "Fast food"};
+        const newObject = {name : "Maccies", location : "Northwich", cuisine : "Fast food"};
 
         const updatedRestaurant = await request(app).put(baseUrl + "/2").send(newObject);
         const parsed = JSON.parse(updatedRestaurant.text);
@@ -108,17 +108,17 @@ describe("PUT /restaurants/:id", function() {
     it("rejects data with no name", async function() {
         const badData = {location: "Kingsmead", cuisine: "Indian"};
         const badRequest = await request(app).put(baseUrl + "/2").send(badData);
-        expect(badRequest.statusCode).toBe(400);
+        expect(badRequest.status).toBe(400);
     })
     it("rejects data with no location", async function() {
         const badData = {name: "Kingsmead spice", cuisine: "Indian"};
         const badRequest = await request(app).put(baseUrl + "/2").send(badData);
-        expect(badRequest.statusCode).toBe(400);
+        expect(badRequest.status).toBe(400);
     })
     it("rejects data with no cuisine", async function() {
         const badData = {name: "Kingsmead spice", location: "Kingsmead"};
         const badRequest = await request(app).put(baseUrl + "/2").send(badData);
-        expect(badRequest.statusCode).toBe(400);
+        expect(badRequest.status).toBe(400);
     })
 })
 
@@ -129,5 +129,9 @@ describe("DELETE /restaurants/:id", function() {
         // Now check it isn't there anymore
         const lookForDeleted = await request(app).get(baseUrl + "/1");
         expect(lookForDeleted.status).toBe(404);
+    })
+    it("can't delete restaurant that doesn't exist", async function() {
+        const response = await request(app).delete(baseUrl + "/999");
+        expect(response.status).toBe(404);
     })
 })
