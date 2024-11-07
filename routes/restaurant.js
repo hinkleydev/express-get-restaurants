@@ -3,10 +3,6 @@ const restaurantRoute = express.Router();
 const Restaurant = require("../models/index");
 const bodyParser = require("body-parser");
 
-// Middleware
-restaurantRoute.use(express.json());
-restaurantRoute.use(express.urlencoded());
-
 // All restaurants
 restaurantRoute.get("/restaurants", async function(req, res) {
     const restaurants = await Restaurant.findAll();
