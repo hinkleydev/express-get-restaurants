@@ -49,21 +49,22 @@ restaurantRoute.post("/restaurants",
 restaurantRoute.put("/restaurants/:id", 
     [checkName(), checkLocation(), checkCuisine()], // Validators 
     async function(req, res) {
-    const error = validationResult(req);
-        if (!error.isEmpty()) {
-            res.status(400).json({error})
+        console.log(req.body);
+        const error = validationResult(req);
+            if (!error.isEmpty()) {
+                res.status(400).json({error})
+                return;
+            }
+        const name = req.body.name;
+        const location = req.body.location;
+        const cuisine = req.body.cuisine;
+        const restaurant = await Restaurant.findByPk(req.params.id);
+        if (restaurant == null) {
+            res.status(404).send({error: "Restaurant not found"});
             return;
         }
-    const name = req.body.name;
-    const location = req.body.location;
-    const cuisine = req.body.cuisine;
-    const restaurant = await Restaurant.findByPk(req.params.id);
-    if (restaurant == null) {
-        res.status(404).send({error: "Restaurant not found"});
-        return;
-    }
-    await restaurant.update({name, location, cuisine});
-    res.json(restaurant);
+        await restaurant.update({name, location, cuisine});
+        res.json(restaurant);
 })
 
 // Delete restaurant

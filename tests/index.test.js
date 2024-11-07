@@ -75,6 +75,21 @@ describe("POST /restaurants", function() {
             expect(parsed[index].cuisine).toBe(original[index].cuisine);
         }
     })
+    it("rejects data with no name", async function() {
+        const badData = {location: "Kingsmead", cuisine: "Indian"};
+        const badRequest = await request(app).post(baseUrl).send(badData);
+        expect(badRequest.statusCode).toBe(400);
+    })
+    it("rejects data with no location", async function() {
+        const badData = {name: "Kingsmead spice", cuisine: "Indian"};
+        const badRequest = await request(app).post(baseUrl).send(badData);
+        expect(badRequest.statusCode).toBe(400);
+    })
+    it("rejects data with no cuisine", async function() {
+        const badData = {name: "Kingsmead spice", location: "Kingsmead"};
+        const badRequest = await request(app).post(baseUrl).send(badData);
+        expect(badRequest.statusCode).toBe(400);
+    })
 })
 
 describe("PUT /restaurants/:id", function() {
@@ -89,6 +104,21 @@ describe("PUT /restaurants/:id", function() {
         expect(parsed.name).toBe(readObject.name);
         expect(parsed.location).toBe(readObject.location);
         expect(parsed.cuisine).toBe(readObject.cuisine);
+    })
+    it("rejects data with no name", async function() {
+        const badData = {location: "Kingsmead", cuisine: "Indian"};
+        const badRequest = await request(app).put(baseUrl + "/2").send(badData);
+        expect(badRequest.statusCode).toBe(400);
+    })
+    it("rejects data with no location", async function() {
+        const badData = {name: "Kingsmead spice", cuisine: "Indian"};
+        const badRequest = await request(app).put(baseUrl + "/2").send(badData);
+        expect(badRequest.statusCode).toBe(400);
+    })
+    it("rejects data with no cuisine", async function() {
+        const badData = {name: "Kingsmead spice", location: "Kingsmead"};
+        const badRequest = await request(app).put(baseUrl + "/2").send(badData);
+        expect(badRequest.statusCode).toBe(400);
     })
 })
 
