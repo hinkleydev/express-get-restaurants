@@ -63,7 +63,7 @@ describe("POST /restaurants", function() {
         // Get an original for comparison
         let response = await request(app).get(baseUrl);
         const original = JSON.parse(response.text);
-        const newObject = {name : "Maccies", location : "Northwich", cuisine : "Fast food"};
+        const newObject = {name : "McDonalds franchise", location : "Northwich", cuisine : "Fast food"}; // Name long enough to pass the test
         original.push(newObject)
 
         const addRestaurant = await request(app).post(baseUrl).send(newObject);
@@ -90,11 +90,21 @@ describe("POST /restaurants", function() {
         const badRequest = await request(app).post(baseUrl).send(badData);
         expect(badRequest.status).toBe(400);
     })
+    it("rejects name too short", async function() {
+        const badData = {name: "Shortname", location: "Kingsmead", cuisine: "Indian"};
+        const badRequest = await request(app).post(baseUrl).send(badData);
+        expect(badRequest.status).toBe(400);
+    })
+    it("rejects name too long", async function() {
+        const badData = {name: "Name that's wayyyyy too long, on and on and on", location: "Kingsmead", cuisine: "Indian"};
+        const badRequest = await request(app).post(baseUrl).send(badData);
+        expect(badRequest.status).toBe(400);
+    })
 })
 
 describe("PUT /restaurants/:id", function() {
     it("updates a restaurants with the provided values", async function() {
-        const newObject = {name : "Maccies", location : "Northwich", cuisine : "Fast food"};
+        const newObject = {name : "McDonalds franchise", location : "Northwich", cuisine : "Fast food"};
 
         const updatedRestaurant = await request(app).put(baseUrl + "/2").send(newObject);
         const parsed = JSON.parse(updatedRestaurant.text);
@@ -117,6 +127,16 @@ describe("PUT /restaurants/:id", function() {
     })
     it("rejects data with no cuisine", async function() {
         const badData = {name: "Kingsmead spice", location: "Kingsmead"};
+        const badRequest = await request(app).put(baseUrl + "/2").send(badData);
+        expect(badRequest.status).toBe(400);
+    })
+    it("rejects name too short", async function() {
+        const badData = {name: "Shortname", location: "Kingsmead", cuisine: "Indian"};
+        const badRequest = await request(app).put(baseUrl + "/2").send(badData);
+        expect(badRequest.status).toBe(400);
+    })
+    it("rejects name too long", async function() {
+        const badData = {name: "Name that's wayyyyy too long, on and on and on", location: "Kingsmead", cuisine: "Indian"};
         const badRequest = await request(app).put(baseUrl + "/2").send(badData);
         expect(badRequest.status).toBe(400);
     })

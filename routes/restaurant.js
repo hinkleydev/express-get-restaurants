@@ -12,6 +12,9 @@ const checkName = () => check("name").not().isEmpty().trim();
 const checkLocation = () => check("location").not().isEmpty().trim();
 const checkCuisine = () => check("cuisine").not().isEmpty().trim();
 
+// This chain checks the length is more than 10 and less than 30
+const checkNameLength = () => check("name").isByteLength({min: 10, max: 30});
+
 // All restaurants
 restaurantRoute.get("/restaurants", async function(req, res) {
     const restaurants = await Restaurant.findAll();
@@ -30,7 +33,7 @@ restaurantRoute.get("/restaurants/:id", async function(req, res) {
 
 // Add new restaurant
 restaurantRoute.post("/restaurants", 
-    [checkName(), checkLocation(), checkCuisine()], // Validators 
+    [checkName(), checkNameLength(), checkLocation(), checkCuisine()], // Validators 
     async function(req, res) {
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -47,9 +50,8 @@ restaurantRoute.post("/restaurants",
 
 // Change restaurant
 restaurantRoute.put("/restaurants/:id", 
-    [checkName(), checkLocation(), checkCuisine()], // Validators 
+    [checkName(), checkNameLength(), checkLocation(), checkCuisine()], // Validators 
     async function(req, res) {
-        console.log(req.body);
         const error = validationResult(req);
             if (!error.isEmpty()) {
                 res.status(400).json({error})
